@@ -15,7 +15,7 @@
     
     <input 
         type="range" 
-        value="7" 
+        value="10" 
         min="4" 
         max="71" 
         id="pswdRange">
@@ -34,29 +34,35 @@
     <button id="copy_pwd">Copiar senha</button>
 
     <script>
+        let passwordRange = 10
         
-
+            
         function generatePswd(){
-            const chars = "abcdefghjklmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789?!@#$&*()[]_-"
-            let pswrdGenerated = ""
 
-            let passwordRange = 4
-
-            selectedPswdValue.addEventListener('input',()=>{
-                viewedPswd.value = ''
-                for (let i = 0; i < selectedPswdValue.value; i++) {                
-                    pswrdGenerated += chars.charAt(Math.random()*chars.length)
-                    console.log(selectedPswdValue.value)     
-                    viewedPswd.value += pswrdGenerated        
-                }                
-                
-            })
-
+            const chars = "abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789?!@#$&()[]_"
+            
+            let password = ""            
+            
+            const pswdResultEl = document.querySelector("#pswdResult")
+            
+            for (let i = 0; i < passwordRange; i++) {
+                const randomNumber = Math.floor(Math.random()*chars.length)
+                password += chars.substring(randomNumber,randomNumber+1)
+                pswdResultEl.value = password
+            }
+            console.log(password) //consoleda senha
         }
 
-        
+        const pswdRangeEl = document.querySelector("#pswdRange")
+            pswdRangeEl.addEventListener('input',function(){
+                passwordRange = pswdRangeEl.value
+                generatePswd()
 
-        generatePswd()
+                
+        })
+        
+        
+        generatePswd()        
     </script>
 </body>
 </html>
