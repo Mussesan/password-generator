@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Gerador de Senha</title>
+</head>
+<body>
+    <header>
+        <h1>Gerador de Senhas</h1>
+        <span>Use este gerador de senhas prático e simples, para obter uma senha forte e segura. Totalmente gratuíto!  </span>
+    </header>
+    
+    <input 
+        type="range" 
+        value="7" 
+        min="4" 
+        max="71" 
+        id="pswdRange">
+
+    <progress 
+        id="progress_bar" 
+        value="5" max="100">
+    </progress>
+
+    <input 
+        type="text" 
+        value="" 
+        readonly 
+        id="pswdResult">
+
+    <button id="copy_pwd">Copiar senha</button>
+
+    <script>
+        
+
+        function generatePswd(){
+            const chars = "abcdefghjklmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789?!@#$&*()[]_-"
+            let pswrdGenerated = ""
+
+            let passwordRange = 4
+
+            selectedPswdValue.addEventListener('input',()=>{
+                viewedPswd.value = ''
+                for (let i = 0; i < selectedPswdValue.value; i++) {                
+                    pswrdGenerated += chars.charAt(Math.random()*chars.length)
+                    console.log(selectedPswdValue.value)     
+                    viewedPswd.value += pswrdGenerated        
+                }                
+                
+            })
+
+        }
+
+        
+
+        generatePswd()
+    </script>
+</body>
+</html>
