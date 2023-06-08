@@ -25,26 +25,28 @@
         value="5" max="100">
     </progress>
 
+    <span id="rangeNumber">10</span>
+
     <input 
         type="text" 
         value="" 
         readonly 
         id="pswdResult">
 
-    <button id="copy_pwd">Copiar senha</button>
+    <button id="copyBtn">Copiar senha</button>
 
     <script>
+        //Declaração de variáveis e elementos usados no script
         let passwordRange = 10
+        const pswdRangeEl = document.querySelector("#pswdRange")
+        const pswdResultEl = document.querySelector("#pswdResult")
+        const rangeNumberEl= document.querySelector("#rangeNumber")
         
-            
+        // Função que gera uma nova senha aleatória,
+        // com o tamanho padrão/base do range que é 10.
         function generatePswd(){
-
             const chars = "abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789?!@#$&()[]_"
-            
-            let password = ""            
-            
-            const pswdResultEl = document.querySelector("#pswdResult")
-            
+            let password = ""
             for (let i = 0; i < passwordRange; i++) {
                 const randomNumber = Math.floor(Math.random()*chars.length)
                 password += chars.substring(randomNumber,randomNumber+1)
@@ -53,16 +55,25 @@
             console.log(password) //consoleda senha
         }
 
-        const pswdRangeEl = document.querySelector("#pswdRange")
-            pswdRangeEl.addEventListener('input',function(){
-                passwordRange = pswdRangeEl.value
-                generatePswd()
-
-                
+        // Aqui sempre que movimentamos o range, 
+        // uma nova senha com o tamanho atual do range é gerada.
+        pswdRangeEl.addEventListener('input',function(){
+            rangeNumberEl.innerHTML = pswdRangeEl.value
+            passwordRange = pswdRangeEl.value
+            generatePswd()
         })
         
-        
-        generatePswd()        
+        function copy() {
+            navigator.clipboard.writeText(pswdResultEl.value)
+            alert('\nSenha copiada para área de transferência.\n\nESC para fechar.')
+            
+        }
+
+        const copyBtnEl = document.querySelector("#copyBtn")
+        copyBtnEl.addEventListener('click', copy)
+
+        // ela ser exibida com uma senha inicial gerada.
+        generatePswd()
     </script>
 </body>
 </html>
