@@ -1,8 +1,225 @@
-header {
-    text-align: center;
+body {
+    background-color: #e5e7eb;
+    font-family: 'Inter', sans-serif;
+    color: #252525;
+    padding: 2rem;
 }
 
-#pswdView {
-    max-width: auto;
-    min-width: 300px;
+main {
+    max-width: 780px;
+    margin: 0 auto;
 }
+.hero {
+    text-align: center;
+    padding-bottom: 3rem;
+}
+.hero .title {
+    font-size: 2rem;
+    font-weight: bold;
+    padding-bottom: 1.5rem;
+}
+
+.hero .subtitle {
+    font-size: 1.125rem;
+    color: #828282
+}
+
+.box {
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(132, 132, 165, 0.6);
+    border-radius: 6px;
+    margin-bottom: 3rem;
+}
+
+.password {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1.5rem;
+}
+
+.password .text {
+    flex: 1;
+}
+
+.password .text input {
+    font-family: 'Inconsolata', serif;
+    font-size: 3rem;
+    border: none;
+    outline: none;
+    cursor: default;
+    height: 52px;
+    width: 100%;
+    transition: all 0.2s;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.password .actions button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.5s;
+}
+
+.security-indicator {
+    height: 10px;
+    background: #ddd;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px; 
+}
+
+.security-indicator .bar.completed {
+    border-top-right-radius: 0;
+}
+
+.security-indicator .bar.critical {
+    background-color: #eb5757;
+}
+
+.security-indicator .bar.warning {
+    background-color: #f2c94c;
+}
+
+.security-indicator .bar.safe {
+    background-color: #27ae60;
+}
+
+.customize .title {
+    border-bottom: 1px solid #dbd9d9;
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    padding-bottom: 0.75rem;
+}
+
+.customize {
+    padding: 1.5rem;
+}
+
+.customize .actions {
+    display: flex;
+    gap: 3rem;
+    color: #828282;
+}
+
+.customize .password-length {
+    flex: 1;
+}
+
+.customize .password-length #pswdRange {
+    appearance: none;
+    background: #ddd;
+    outline: none;
+    border-radius: 9px;
+    width: 100%;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    margin-top: 1rem;
+}
+
+.customize .password-length #pswdRange:hover {
+    opacity: 1;
+}
+
+.customize .password-length #pswdRange::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 25px;
+    background-color: #6651e0;
+    cursor: pointer;
+}
+
+.customize .password-length #pswdRange::-moz-range-thumb {
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+    background-color: #6651e0;
+    cursor: pointer;
+}
+
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.checkbox-container input {
+    position: absolute;
+    height: 0;
+    width: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkbox-container .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #dddddd;
+    transition: all 0.6s;
+    opacity: 0.6;
+    border-radius: 3px;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+    opacity: 1;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+    background-color: #6651e0;
+    opacity: 1;
+}
+
+.checkbox-container .checkmark:after {
+    content: "";
+    display: none;
+    position: absolute;
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 13px;
+    border: solid #dddddd;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-container .checkmark:after {
+    display: block;
+}
+
+.submit {
+    text-align: center;    
+}
+
+#copyBottom {
+    border: none;
+    background: #6651e0;
+    color: white;
+    font-size: 1.375rem;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 1rem 2rem;
+    transition: all 0.2s;
+    opacity: 0.6;
+}
+
+#copyBottom:hover {
+    opacity: 1;
+    box-shadow: 6px 5px 5px #b39ec7c9;    
+}
+
+

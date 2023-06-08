@@ -4,36 +4,80 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">    
+    <style> 
+        /*  Aqui restamos zerando alguns elementos para manter
+            um padrão em qualquer navegador que seja aberto */
+        html {box-sizing: border-box; font-size: 16px;}        
+        *,*:before,*:after {box-sizing: inherit;}        
+        body,h1,h2,h3,h4,h5,h6,p,ol,ul {margin: 0; padding: 0; font-weight: normal;}        
+        ol,ul {list-style: none;}
+        img {max-width: 100%; height: auto;}
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
     <title>Gerador de Senha</title>
 </head>
 <body>
-    <header>
-        <h1>Gerador de Senhas</h1>
-        <span>Use este gerador de senhas prático e simples, para obter uma senha forte e segura. Totalmente gratuíto!  </span>
-    </header>
-    
-    <input 
-        type="range" 
-        value="10" 
-        min="4" 
-        max="71" 
-        id="pswdRange">
+    <main>
+        <section class="hero">
+            <h1 class="title">Gerador de Senhas</h1>
+            <span class="subtitle">Use este gerador de senhas prático e simples, para obter uma senha forte e segura.</span><br>
+            <span class="subtitle">Totalmente gratuíto!</span>
+        </section>
+        
+        <section class="box">
+            <div class="password">
+                <div class="text">
+                    <input type="text" readonly id="pswdResult">
+                </div>
+                <div class="actions">
+                    <button id="copyTop">
+                        <img src="copy.svg" alt="Copiar">
+                    </button>
+                    <button id="refresh">
+                        <img src="renew.svg" alt="Refresh">
+                    </button>
+                </div>
+            </div>
+            <div class="security-indicator">
+                <div id="bar" class="bar" width="90%"></div>
+            </div>
+        </section>
 
-    <progress 
-        id="progress_bar" 
-        value="5" max="100">
-    </progress>
+        <section class="box customize">
+            <h3 class="title">Personalizar</h3>
+            <div class="actions">
+                <div class="password-length">
+                    <p>Tamanho: <span id="rangeNumber">10</span></p>
+                    <input type="range" value="10" min="4" max="71" id="pswdRange">
+                </div>
+                <div class="config">
+                    <label class="checkbox-container">
+                        <span class="text">Maiúsculas</span>
+                        <input type="checkbox" id="uppercase-check" checked />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">
+                        <span class="text">Números</span>
+                        <input type="checkbox" id="number-check" checked />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">
+                        <span class="text">Símbolos</span>
+                        <input type="checkbox" id="simbol-check" checked />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>            
+        </section>
 
-    <span id="rangeNumber">10</span>
-
-    <input 
-        type="text" 
-        value="" 
-        readonly 
-        id="pswdResult">
-
-    <button id="copyBtn">Copiar senha</button>
+        <div class="submit">
+            <button id="copyBottom">Copiar senha</button>
+        </div>        
+    </main>
 
     <script>
         //Declaração de variáveis e elementos usados no script
@@ -41,12 +85,31 @@
         const pswdRangeEl = document.querySelector("#pswdRange")
         const pswdResultEl = document.querySelector("#pswdResult")
         const rangeNumberEl= document.querySelector("#rangeNumber")
+
+        const uppercaseCheckEl = document.querySelector("#uppercase-check")
+        const numberCheckEl = document.querySelector("#number-check")
+        const simbolCheckEl = document.querySelector("#simbol-check")
         
         // Função que gera uma nova senha aleatória,
         // com o tamanho padrão/base do range que é 10.
         function generatePswd(){
-            const chars = "abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789?!@#$&()[]_"
+            
+            let chars = "abcdefghjklmnopqrstuvwxyz"
+            let numbers = "0123456789"
+            let upperCase = "ABCDEFGHJKLMNOPQRSTUVWXYZ"
+            let simbols = "?!@#$&()[]_"
             let password = ""
+           
+            if (uppercaseCheckEl.checked) {
+                chars += upperCase
+            }
+            if (numberCheckEl.checked) {
+                chars += numbers
+            }
+            if (simbolCheckEl.checked) {
+                chars += simbols
+            }
+            
             for (let i = 0; i < passwordRange; i++) {
                 const randomNumber = Math.floor(Math.random()*chars.length)
                 password += chars.substring(randomNumber,randomNumber+1)
@@ -65,12 +128,11 @@
         
         function copy() {
             navigator.clipboard.writeText(pswdResultEl.value)
-            alert('\nSenha copiada para área de transferência.\n\nESC para fechar.')
-            
         }
 
-        const copyBtnEl = document.querySelector("#copyBtn")
-        copyBtnEl.addEventListener('click', copy)
+        document.querySelector("#copyTop").addEventListener('click', copy)
+        document.querySelector("#copyBottom").addEventListener('click', copy)
+        document.querySelector("#refresh").addEventListener('click',generatePswd)
 
         // ela ser exibida com uma senha inicial gerada.
         generatePswd()
