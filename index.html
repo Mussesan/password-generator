@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="toggle.css">
     <style> 
         /*  Aqui restamos zerando alguns elementos para manter
             um padrão em qualquer navegador que seja aberto */
@@ -22,6 +23,31 @@
 </head>
 <body>
     <main>
+        <header>
+            <nav class="utilities-menu">
+                <div id="dark-mode">
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-check" checked>
+                        <div class="toggle"></div>
+                        <div class="toggle-card">
+                          <div class="toggle-card-face toggle-card-front"></div>
+                          <div class="toggle-card-face toggle-card-back"></div>
+                        </div>
+                    </label>
+                </div>
+                <div id="change-palette">
+                    <label class="switch">
+                        <input type="checkbox" id="change-palette-check" checked>
+                        <div class="slider"></div>
+                        <div class="slider-card">
+                          <div class="slider-card-face slider-card-front"></div>
+                          <div class="slider-card-face slider-card-back"></div>
+                        </div>
+                    </label>
+                </div>
+            </nav>
+        </header>
+        
         <section class="hero">
             <h1 class="title">Gerador de Senhas</h1>
             <span class="subtitle">Use este gerador de senhas prático e simples, para obter uma senha forte e segura.</span><br>
@@ -31,7 +57,7 @@
         <section class="box">
             <div class="password">
                 <div class="text">
-                    <input type="text" readonly id="pswdResult">
+                    <input type="text" readonly id="passwordResult">
                 </div>
                 <div class="actions">
                     <button id="copyTop">
@@ -43,7 +69,7 @@
                 </div>
             </div>
             <div class="security-indicator">
-                <div id="bar" class="bar" width="90%"></div>
+                <div id="bar" class="bar"></div>
             </div>
         </section>
 
@@ -52,7 +78,7 @@
             <div class="actions">
                 <div class="password-length">
                     <p>Tamanho: <span id="rangeNumber">10</span></p>
-                    <input type="range" value="10" min="4" max="71" id="pswdRange">
+                    <input type="range" value="10" min="4" max="71" id="passwordRange">
                 </div>
                 <div class="config">
                     <label class="checkbox-container">
@@ -82,9 +108,10 @@
     <script>
         //Declaração de variáveis e elementos usados no script
         let passwordRange = 10
-        const pswdRangeEl = document.querySelector("#pswdRange")
-        const pswdResultEl = document.querySelector("#pswdResult")
+        const passwordRangeEl = document.querySelector("#passwordRange")
+        const passwordResultEl = document.querySelector("#passwordResult")
         const rangeNumberEl= document.querySelector("#rangeNumber")
+        const securityBarEl = document.querySelector("#bar")
 
         const uppercaseCheckEl = document.querySelector("#uppercase-check")
         const numberCheckEl = document.querySelector("#number-check")
@@ -92,50 +119,132 @@
         
         // Função que gera uma nova senha aleatória,
         // com o tamanho padrão/base do range que é 10.
-        function generatePswd(){
+        function generatepassword(){
             
+            // aqui temos nossa base de dados separada por categorias diferentes:
+            // letras minúsculas, números, letras maiúsculas e símbolos
             let chars = "abcdefghjklmnopqrstuvwxyz"
             let numbers = "0123456789"
             let upperCase = "ABCDEFGHJKLMNOPQRSTUVWXYZ"
             let simbols = "?!@#$&()[]_"
             let password = ""
            
-            if (uppercaseCheckEl.checked) {
-                chars += upperCase
-            }
-            if (numberCheckEl.checked) {
-                chars += numbers
-            }
-            if (simbolCheckEl.checked) {
-                chars += simbols
-            }
+            if (uppercaseCheckEl.checked){chars += upperCase}
+            if (numberCheckEl.checked){chars += numbers}
+            if (simbolCheckEl.checked){chars += simbols}
             
             for (let i = 0; i < passwordRange; i++) {
                 const randomNumber = Math.floor(Math.random()*chars.length)
                 password += chars.substring(randomNumber,randomNumber+1)
-                pswdResultEl.value = password
+                passwordResultEl.value = password
             }
-            console.log(password) //consoleda senha
+            calcQualityPassword()
+            ajustSizeTextInput()
+        }
+
+        function calcQualityPassword(){
+            const percent = Math.round(((passwordRange/71) * 65)+ 
+                (uppercaseCheckEl.checked? 10 : 0)+ 
+                (numberCheckEl.checked? 10 : 0)+ 
+                (simbolCheckEl.checked? 15 : 0)) 
+
+            securityBarEl.style.width = `${percent}%`
+
+            securityBarEl.classList.toggle("critical",percent <= 39)
+            securityBarEl.classList.toggle("warning", percent >= 40 && percent <= 53)
+            securityBarEl.classList.toggle("moderate", percent >= 54 && percent <= 64)
+            securityBarEl.classList.toggle("safe", percent >= 65 && percent <= 100)            
+        }
+
+        function ajustSizeTextInput(){
+            if (passwordRange > 45) {
+                passwordResultEl.classList.remove("sm")
+                passwordResultEl.classList.remove("xs")
+                passwordResultEl.classList.add("xxs")
+            } else if (passwordRange > 32){
+                passwordResultEl.classList.remove("sm")
+                passwordResultEl.classList.add("xs")
+                passwordResultEl.classList.remove("xxs")
+            } else if (passwordRange > 22) {
+                passwordResultEl.classList.add("sm")
+                passwordResultEl.classList.remove("xs")
+                passwordResultEl.classList.remove("xxs")
+            } else {
+                passwordResultEl.classList.remove("sm")
+                passwordResultEl.classList.remove("xs")
+                passwordResultEl.classList.remove("xxs")
+            }
         }
 
         // Aqui sempre que movimentamos o range, 
         // uma nova senha com o tamanho atual do range é gerada.
-        pswdRangeEl.addEventListener('input',function(){
-            rangeNumberEl.innerHTML = pswdRangeEl.value
-            passwordRange = pswdRangeEl.value
-            generatePswd()
+        passwordRangeEl.addEventListener('input',function(){
+            rangeNumberEl.innerHTML = passwordRangeEl.value
+            passwordRange = passwordRangeEl.value
+            generatepassword()
         })
+
+        // sempre que marcamos ou desmarcamos um checkbox
+        // uma nova senha é gerada.
+        uppercaseCheckEl.addEventListener('click',generatepassword)
+        numberCheckEl.addEventListener('click',generatepassword)
+        simbolCheckEl.addEventListener('click',generatepassword)
         
-        function copy() {
-            navigator.clipboard.writeText(pswdResultEl.value)
+        function copy() { //função copiar para área de transferência
+            navigator.clipboard.writeText(passwordResultEl.value)
         }
 
         document.querySelector("#copyTop").addEventListener('click', copy)
         document.querySelector("#copyBottom").addEventListener('click', copy)
-        document.querySelector("#refresh").addEventListener('click',generatePswd)
+        document.querySelector("#refresh").addEventListener('click',generatepassword)
 
         // ela ser exibida com uma senha inicial gerada.
-        generatePswd()
+        generatepassword()
+
+        function changeThemes() {
+            const darkModeEl = document.querySelector("#dark-mode-check")
+            const changePaletteEl = document.querySelector("#change-palette-check")
+            const myBody = document.querySelector('body')
+            const myTitle = document.querySelector('.hero')
+            const boxEl = document.querySelector('.box')
+            const customizeEl = document.querySelector('.customize')
+            const configEl = document.querySelector('.config')
+            const passwordLengthEl = document.querySelector('.password-length')
+            const passwordRangeEl = document.querySelector('.-webkit-slider-thumb')
+
+
+            
+
+            darkModeEl.addEventListener('change',function(){
+                if (!darkModeEl.checked){
+                    myBody.style.backgroundColor = '#1b1b1b'
+                    myBody.style.color = '#fff'
+                    boxEl.style.backgroundColor = '#4e4e4e'
+                    passwordResultEl.style.color = '#fff'
+                    passwordResultEl.style.backgroundColor = '#4e4e4e'
+                    customizeEl.style.color = '#fff'
+                    customizeEl.style.backgroundColor = '#4e4e4e'
+                    configEl.style.color = '#fff'
+                    passwordLengthEl.style.color = '#fff'
+                    
+                } else {
+                    myBody.style.backgroundColor = '#ddd'
+                    myBody.style.color = '#1b1b1b'
+                    boxEl.style.backgroundColor = '#fff'
+                    passwordResultEl.style.color = '#4e4e4e'
+                    passwordResultEl.style.backgroundColor = '#fff'
+                    customizeEl.style.color = '#4e4e4e'
+                    customizeEl.style.backgroundColor = '#fff'
+                    customizeEl.style.color = '#4e4e4e'
+                    customizeEl.style.backgroundColor = '#fff'
+                    configEl.style.color = '#4e4e4e'
+                    passwordLengthEl.style.color = '#4e4e4e'
+                }
+            })
+        }
+
+        changeThemes()
+        
     </script>
 </body>
 </html>
